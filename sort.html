@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .filterDiv {
+            display: none;
+        }
+        
+        .show {
+            display: block !important;
+        }
+        
+        */
+    </style>
+
+</head>
+
+<body>
+    <h1>Exercice API pokemon</h1>
+
+    <h4>Premier element de notre liste:</h4>
+    <div id="first"></div>
+
+    <h4>Filter Liste:</h4>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('all')"> Show All</button>
+        <button class="btn" onclick="filterSelection('feu')"> feu</button>
+        <button class="btn" onclick="filterSelection('eau')"> eau</button>
+        <button class="btn" onclick="filterSelection('air')"> air</button>
+        <button class="btn" onclick="filterSelection('elec')"> elec</button>
+        <button class="btn" onclick="filterSelection('psy')"> psy</button>
+    </div>
+
+    <h4>Liste:</h4>
+    <div id="list"></div>
+
+    <!-- Vous pouvez aussi ajouter la génération auto en décommentant le setInterval dans index.js -->
+    <!-- <button onclick='getPoke()'>Générer une nouvelle blague</button> -->
+
+
+
+    <script>
+        // Url de l'api
+        const url = 'http://localhost:5500/poke.json'
+
+        const first = document.getElementById('first')
+        const list = document.getElementById('list')
+
+        function getPoke() {
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const poke = data.results
+                    makeList(poke)
+                })
+                .catch(err => console.log(err))
+        }
+
+        function makeList(data) {
+            console.log("LISTE: ", data)
+            let ul = document.createElement('ul')
+            ul.setAttribute('id', 'myUl')
+
+            for (var i = 0; i < data.length; i++) {
+                let li = document.createElement('li')
+                let a = document.createElement('a')
+                let p = document.createElement('p')
+
+                // console.log(a)
+                li.appendChild(a)
+                a.innerHTML = 'name:' + data[i].name
+                li.appendChild(p)
+                p.innerHTML = 'type:' + data[i].type
+
+                ul.appendChild(li)
+
+                list.appendChild(ul)
+                    // console.log(data[i].name)
+            }
+        }
+
+        getPoke()
+
+        function sortTable() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    x = rows[i].getElementsByTagName("TD")[0];
+                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    //check if the two rows should switch place:
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
